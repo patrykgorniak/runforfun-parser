@@ -1,0 +1,3 @@
+2014-03-03 11:38:58,428 - httpUtils:194 - DEBUG - Session: None Args: {'page': 1, 'url': 'http://online.datasport.pl/#kotw11', 'page_size': 10}
+2014-03-03 11:38:59,324 - EventList:65 - DEBUG - Source encoding: windows-1250 
+2014-03-03 11:39:02,381 - EventList:77 - DEBUG - Parsed 1070 entries
