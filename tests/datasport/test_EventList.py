@@ -17,7 +17,7 @@ class TestEventList(unittest.TestCase):
 
     def setUp(self):
         self.args = {}
-        self.args['url'] = "file:./data/EventLists.html"
+        self.args['url'] = "file:./tests/datasport/data/EventLists.html"
         self.items = EventList.get_events_list(None, self.args)
 
     def test_events_list_count(self):
