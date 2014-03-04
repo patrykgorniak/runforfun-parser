@@ -31,6 +31,8 @@ def login(session, args):
                 "There are no arguments provided")
     # if args.has_key('user') and args.has_key('pass'):
     #        raise HttpUtils.InvalidParametersException("Username and Password not provide")
+
+
     url_datasport = 'https://online.datasport.pl/zapisy/portal/hid/logon.php'
     url_post_data = {'login': args['user'], 'haslo': args['pass']}
     request_object = HttpUtils.prepare_request_object(url_datasport, url_post_data,
