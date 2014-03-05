@@ -82,18 +82,16 @@ class HttpMethod:
 
 
 def prepare_request_object(url, args, method):
+    print(method)
+    encoded_args = urllib.parse.urlencode(args)
+    request_method = {
+        HttpMethod.POST: urllib.request.Request(url, encoded_args.encode('utf-8')),
+        HttpMethod.GET: urllib.request.Request(url+"?"+encoded_args),
+        }
 
-        encoded_args = urllib.parse.urlencode(args)
-
-        request_method = {
-            HttpMethod.GET: urllib.request.Request(url+"?"+encoded_args),
-            HttpMethod.POST: urllib.request.Request(url, encoded_args),
-            }
-
-        request_object = request_method.get(method, urllib.request.Request(url+"?"+encoded_args))
-        logger.debug("Url: %s Request method: %d Encoded arguments %s" %
-                     (url, method, encoded_args))
-        return request_object
+    request_object = request_method.get(method, urllib.request.Request(url+"?"+encoded_args))
+    logger.debug("Url: %s Request method: %d Encoded arguments %s" % (url, method, encoded_args))
+    return request_object
 
 
 def load_local_session_data(session_id):

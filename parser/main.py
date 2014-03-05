@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import cgi
 import cgitb
-from services.datasport import EventList
-from auth import login, logout, is_logged_in, change_password
+from parser.services import datasport
+
 import logging
 import logging.config
 import httpUtils as HttpUtils
