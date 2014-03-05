@@ -10,7 +10,7 @@ Tests for `EventList` functionality.
 
 
 import unittest
-from parser.services.datasport import EventList
+from parser.services.datasport import eventlist
 
 
 class TestEventList(unittest.TestCase):
@@ -18,14 +18,14 @@ class TestEventList(unittest.TestCase):
     def setUp(self):
         self.args = {}
         self.args['url'] = "file:./tests/datasport/data/EventLists.html"
-        self.items = EventList.get_events_list(None, self.args)
+        self.items = eventlist.get_events_list(None, self.args)
 
     def test_events_list_count(self):
         self.assertEqual(len(self.items), 1066, "Incorrect size of events")
 
     def test_event_list_check_elements(self):
         self.assertEqual(self.items[0]['location'], "Legnica")
-        self.assertEqual(self.items[0]['type'], EventList.EventType.RUNNING)
+        self.assertEqual(self.items[0]['type'], eventlist.EventType.RUNNING)
         self.assertEqual(self.items[0]['results_page'], "")
         self.assertEqual(self.items[0]['website'], "")
         self.assertEqual(self.items[0]['name'], "LEGNICA PÓŁMARATON - XXVII Bieg Lwa Legnickiego")

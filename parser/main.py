@@ -5,7 +5,7 @@ from parser.services import datasport
 
 import logging
 import logging.config
-import httpUtils as HttpUtils
+from parser.common.utils import httpmanager
 logging.config.fileConfig('common/configs/logger.conf')
 logger = logging.getLogger(__name__)
 
@@ -20,22 +20,22 @@ if action == "events":
     args['page_size'] = int(form.getvalue('page_size', default_page_size))
     args['page'] = int(form.getvalue('page', default_page))
     args['url'] = "http://online.datasport.pl/#kotw11"
-    HttpUtils.call_api_func(EventList.get_events_list, args, False)
+    httpmanager.call_api_func(EventList.get_events_list, args, False)
 elif action == 'login':
     args['user'] = form.getvalue("user", "")
     args['pass'] = form.getvalue("password", "")
-    HttpUtils.call_api_func(login, args, False)
+    httpmanager.call_api_func(login, args, False)
 elif action == 'logout':
-    HttpUtils.call_api_func(logout, args, True)
+    httpmanager.call_api_func(logout, args, True)
 elif action == "change_password":
     args['old'] = form.getvalue("old", "")
     args['new'] = form.getvalue("new", "")
-    HttpUtils.call_api_func(change_password, args, True)
+    httpmanager.call_api_func(change_password, args, True)
 elif action == "get_user_data":
-    HttpUtils.call_api_func(get_user_data, {}, True)
+    httpmanager.call_api_func(get_user_data, {}, True)
 elif action == "find_by_name":
     args['pattern'] = form.getvalue('pattern', "")
-    HttpUtils.call_api_func(Search.search_by_name, args, True)
+    httpmanager.call_api_func(Search.search_by_name, args, True)
 else:
     print("Status: 200 OK")
     print("Content-type: text/html")

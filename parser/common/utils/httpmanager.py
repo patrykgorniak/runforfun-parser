@@ -160,14 +160,16 @@ def validate_session_cookie(session, cookie_key):
 
 
 def save_session(cookie_string, user_id):
-        if not os.path.exists(session_dir):
-                os.makedirs(session_dir)
+    if not os.path.exists(session_dir):
+            os.makedirs(session_dir)
+    new_cookie = SimpleCookie(cookie_string)
+    fCoockie = open(session_dir + new_cookie['user'].value, "wb")
+    fUserId = open(session_dir + '.id.' + new_cookie['user'].value, "wb")
+    pickle.dump(cookie_string, fCoockie)
+    pickle.dump(user_id, fUserId)
+    fCoockie.close()
+    fUserId.close()
 
-        new_cookie = SimpleCookie(cookie_string)
-        pickle.dump(cookie_string,
-                    open(session_dir+new_cookie['user'].value, "wb"))
-        pickle.dump(user_id,
-                    open(session_dir+'.id.'+new_cookie['user'].value, "wb"))
 
 
 def call_api_func(function, args, login_needed):
