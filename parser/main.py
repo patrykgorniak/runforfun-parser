@@ -1,16 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import cgi
 import cgitb
-from parser.services import datasport
-from parser.common.utils import cgiwrapper
-from parser.common.utils import httpmanager
+cgitb.enable()
+from services import datasport
+from common.utils import cgiwrapper
+from common.utils import httpmanager
 
 import logging
 import logging.config
 logging.config.fileConfig('common/configs/logger.conf')
 logger = logging.getLogger(__name__)
 
-default_action = 'events'
+default_action = ''
 default_page_size = 10
 default_page = 1
 default_body = "You must specify action to perform"
