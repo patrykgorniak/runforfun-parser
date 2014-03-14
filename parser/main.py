@@ -2,10 +2,11 @@
 import cgi
 import cgitb
 from parser.services import datasport
+from parser.common.utils import cgiwrapper
+from parser.common.utils import httpmanager
 
 import logging
 import logging.config
-from parser.common.utils import httpmanager
 logging.config.fileConfig('common/configs/logger.conf')
 logger = logging.getLogger(__name__)
 
@@ -37,8 +38,4 @@ elif action == "find_by_name":
     args['pattern'] = form.getvalue('pattern', "")
     httpmanager.call_api_func(Search.search_by_name, args, True)
 else:
-    print("Status: 200 OK")
-    print("Content-type: text/html")
-    print("Length: ", len(default_body))
-    print("")
-    print(default_body)
+    cgiwrapper.publish(default_body)
