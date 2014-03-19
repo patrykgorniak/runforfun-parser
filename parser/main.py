@@ -1,42 +1,20 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import cgitb
 cgitb.enable()
-from services import datasport
+import services.datasport.datasportmanager as datasport
 from common.utils import cgiwrapper
 from common.utils import httpmanager
+from common.utils import servicemanager
 
 import logging
 import logging.config
-logging.config.fileConfig('common/configs/logger.conf')
-logger = logging.getLogger(__name__)
 
-default_action = ''
-default_page_size = 10
-default_page = 1
-default_body = "You must specify action to perform"
-args = {}
 form = cgi.FieldStorage()
+default_action = 'get_events'
+default_service = 'datasport'
+service = form.getvalue('service', default_service)
 action = form.getvalue('action', default_action)
-if action == "events":
-    args['page_size'] = int(form.getvalue('page_size', default_page_size))
-    args['page'] = int(form.getvalue('page', default_page))
-    args['url'] = "http://online.datasport.pl/#kotw11"
-    httpmanager.call_api_func(EventList.get_events_list, args, False)
-elif action == 'login':
-    args['user'] = form.getvalue("user", "")
-    args['pass'] = form.getvalue("password", "")
-    httpmanager.call_api_func(login, args, False)
-elif action == 'logout':
-    httpmanager.call_api_func(logout, args, True)
-elif action == "change_password":
-    args['old'] = form.getvalue("old", "")
-    args['new'] = form.getvalue("new", "")
-    httpmanager.call_api_func(change_password, args, True)
-elif action == "get_user_data":
-    httpmanager.call_api_func(get_user_data, {}, True)
-elif action == "find_by_name":
-    args['pattern'] = form.getvalue('pattern', "")
-    httpmanager.call_api_func(Search.search_by_name, args, True)
-else:
-    cgiwrapper.publish(default_body)
+cgiwrapper.publish(servicemanager.run(service, action, None))
