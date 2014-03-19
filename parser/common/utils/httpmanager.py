@@ -1,5 +1,6 @@
 import os
 from http.cookies import SimpleCookie
+import httplib2
 import datetime
 import re
 import urllib.request
@@ -207,3 +208,20 @@ def call_api_func(function, args, login_needed):
                 generate_response(STATUS_OK, CONTENT_HTML, json_dump,
                                   cookie=SimpleCookie(response.get('cookie', None)))
 #                fp.write(json_dump)
+
+httpHandler = httplib2.Http('.cache')
+
+
+def httprequest(url, args, dst_encoding="utf8", method="GET"):
+    response, content = httpHandler.request(url, method)
+    return content
+
+
+
+
+
+
+
+
+
+
