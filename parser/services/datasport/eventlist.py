@@ -1,7 +1,7 @@
 from pyquery import PyQuery
 import urllib.request
 import logging
-from parser.common.utils import httpmanager
+from common.utils import httpmanager
 logger = logging.getLogger("EventList")
 
 
@@ -57,10 +57,8 @@ def __parse_row(entry_row):
     return vars(info)
 
 
-def get_events_list(session, args):
-    fHnd=urllib.request.urlopen(args['url'])
-    html = fHnd.read()
-    query = PyQuery(html)   # url="http://online.datasport.pl/#kotw11")
+def get_events_list(html, args):
+    query = PyQuery(html)
     logger.debug("Source encoding: {} ".format(query.encoding))
     rows = query.items('tr')
     offset = 0
@@ -74,5 +72,4 @@ def get_events_list(session, args):
         offset += 1
 
     logger.debug("Parsed {} entries".format(found))
-    fHnd.close()
     return events
