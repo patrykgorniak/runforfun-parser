@@ -2,7 +2,6 @@ import json
 from services.datasport import datasportmanager
 
 servicesMgr = {}
-
 servicesMgr['datasport'] = {
     'get_events': datasportmanager.get_events
 }

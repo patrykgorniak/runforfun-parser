@@ -17,4 +17,5 @@ default_action = 'get_events'
 default_service = 'datasport'
 service = form.getvalue('service', default_service)
 action = form.getvalue('action', default_action)
+
 cgiwrapper.publish(servicemanager.run(service, action, None))

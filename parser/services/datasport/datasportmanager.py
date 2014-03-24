@@ -5,8 +5,9 @@ import logging
 logger = logging.getLogger("EventList")
 import json
 
-def get_events(pattern=None):
-    args={}
-    content = httpmanager.httprequest(COMMON_DATA['EVENT_LIST']['URL'], args)
-    results = eventlist.get_events_list(content, args)
-    return json.dumps({ 'Status': 'OK', 'Data': results }, indent=4, ensure_ascii=False)
+
+def get_events(filter=None):
+    args = {}
+    res, content = httpmanager.httprequest(COMMON_DATA['EVENT_LIST']['URL'], args)
+    results = eventlist.unpack_events(content, args)
+    return json.dumps({'Status': 'OK', 'Data': results}, indent=4)
