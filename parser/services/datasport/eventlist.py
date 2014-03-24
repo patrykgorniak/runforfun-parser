@@ -57,19 +57,17 @@ def __parse_row(entry_row):
     return vars(info)
 
 
-def get_events_list(html, args):
+def unpack_events(html, args):
     query = PyQuery(html)
     logger.debug("Source encoding: {} ".format(query.encoding))
     rows = query.items('tr')
     offset = 0
     events = {}
-    found = 0
     for row in rows:
         parsed_row = __parse_row(row)
         event_id = offset
         events.update({event_id: parsed_row})
-        found += 1
         offset += 1
 
-    logger.debug("Parsed {} entries".format(found))
+    logger.debug("Parsed {} entries".format(offset))
     return events
