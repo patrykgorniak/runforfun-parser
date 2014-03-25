@@ -3,7 +3,8 @@ from services.datasport import datasportmanager
 
 servicesMgr = {}
 servicesMgr['datasport'] = {
-    'get_events': datasportmanager.get_events
+    'get_events': datasportmanager.get_events,
+    'login': datasportmanager.login
 }
 
 
