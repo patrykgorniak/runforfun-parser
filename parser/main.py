@@ -13,7 +13,7 @@ import logging
 import logging.config
 
 form = cgi.FieldStorage()
-default_action = 'get_events'
+default_action = 'login'
 default_service = 'datasport'
 service = form.getvalue('service', default_service)
 action = form.getvalue('action', default_action)
