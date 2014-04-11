@@ -1,0 +1,8 @@
+Django==1.6.2
+Jinja2==2.7.2
+MarkupSafe==0.19
+cssselect==0.9.1
+docutils==0.11
+httplib2==0.8
+lxml==3.3.2
+pyquery==1.2.8
