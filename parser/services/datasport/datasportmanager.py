@@ -1,6 +1,6 @@
-from services.datasport import eventlist
-from services.datasport.urls import COMMON_DATA
-from common.utils import httpmanager
+from parser.services.datasport import eventlist
+from parser.services.datasport.urls import COMMON_DATA
+from parser.common.utils import httpmanager
 import urllib
 import logging
 logger = logging.getLogger("EventList")
