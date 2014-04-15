@@ -4,7 +4,8 @@ from parser.services.datasport import datasportmanager
 servicesMgr = {}
 servicesMgr['datasport'] = {
         'get_events': datasportmanager.get_events,
-        'login': datasportmanager.login
+        'login': datasportmanager.login,
+        'myaccount': datasportmanager.myaccount
 }
 
 
@@ -16,7 +17,7 @@ def __error__(reason):
 def run(service, action, args):
     if service in servicesMgr:
         if action in servicesMgr[service]:
-            return servicesMgr[service][action]()
+            return servicesMgr[service][action](args)
         else:
             return __error__(action)
     else:

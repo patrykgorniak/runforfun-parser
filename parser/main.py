@@ -5,12 +5,12 @@ import parser.services.datasport.datasportmanager as datasport
 from parser.common.utils import cgiwrapper
 from parser.common.utils import httpmanager
 from parser.common.utils import servicemanager
+import os
 
 import logging
 import logging.config
-
-default_action = 'get_events'
-default_service = 'datasport'
+BASEDIR=os.path.dirname(__file__)
+logging.config.fileConfig(BASEDIR + '/common/configs/logger.conf')
 
 def rff_run(request):
     if request.META['REQUEST_METHOD']=="GET":
@@ -19,8 +19,8 @@ def rff_run(request):
     else:
         service = request.GET['service']
         action  = request.GET['action']
-
-    return servicemanager.run(service, action, None)
+    args = request.GET
+    return servicemanager.run(service, action, args)
 
 def run(_service, _action):
     cgiwrapper.publish(servicemanager.run(_service, _action, None))

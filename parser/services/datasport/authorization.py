@@ -1,7 +1,9 @@
 import logging
+import random
 import urllib.request
 
 from parser.common.utils import httpmanager
+from parser.services.datasport.urls import COMMON_DATA
 
 logger = logging.getLogger(__name__)
 
@@ -10,12 +12,9 @@ logger = logging.getLogger(__name__)
 incorrect_login_body = """
 You must login to perform this operation
 """
-
-
 def incorrect_login():
     httpmanager.generate_response(
         httpmanager.STATUS_UNAUTHORIZED, httpmanager.CONTENT_HTML, incorrect_login_body)
-
 
 def is_logged_in(session):
     if session is None:
@@ -24,7 +23,7 @@ def is_logged_in(session):
         return httpmanager.validate_session_cookie(session['cookie'], 'user') and httpmanager.validate_session_user_id(session['user'])
 
 
-def login(session, args):
+def __login(session, args):
     if args is None:
             raise httpmanager.InvalidParametersException(
                 "There are no arguments provided")
@@ -61,7 +60,7 @@ def logout(session, args):
     logger.debug("Logging out")
     if session is None:
         raise httpmanager.InvalidSessionException("Invalid session")
-    url_datasport = 'https://online.datasport.pl/zapisy/portal/hid/unlog.php'
+    url_datasport = 'https://online.datasport.pl/zapisy/portal/hid/uAnlog.php'
     request_object = httpmanager.prepare_request_object(
         url_datasport, args, httpmanager.HttpMethod.GET)
     request_object.add_header("Cookie", session['cookie'])
@@ -95,3 +94,36 @@ def change_password(session, args):
             raise Exception("Cannot change password")
     else:
         return {"status": "OK"}
+
+
+
+
+def checkCredentials(args):
+    if 'cookie' not in args:
+        if 'login' not in args and 'haslo' not in args:
+            headers = { 'Cookie': "" }
+        else:
+            login_resp = login(args)
+            if login_resp != "":
+                headers = { 'Cookie': login_resp }
+            else:
+                headers = { 'Cookie': "" }
+    else:
+        headers = { 'Cookie': 'user={0}'.format(args['cookie']) }
+
+    return headers
+
+def los():
+    nb = round(random(0,12)*100000)
+    return nb
+
+def login(args):
+    result = None
+    headers = {'Content-type': 'application/x-www-form-urlencoded'}
+    res, cont = httpmanager.httprequest(COMMON_DATA['LOGIN']['URL'], COMMON_DATA['LOGIN']['LOGIN_NEEDED'], args, 'POST', headers, urllib.parse.urlencode(args))
+    if 'set-cookie' not in res:
+        result = ""
+    else:
+        result = res['set-cookie']
+
+    return (result)

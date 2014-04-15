@@ -1,7 +1,5 @@
 from pyquery import PyQuery
-import urllib.request
 import logging
-from parser.common.utils import httpmanager
 logger = logging.getLogger("EventList")
 
 

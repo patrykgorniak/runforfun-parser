@@ -214,9 +214,9 @@ def call_api_func(function, args, login_needed):
 httpHandler = httplib2.Http('.cache', disable_ssl_certificate_validation=True)
 
 def httprequest(url, login_needed, args, method="GET", headers=None, body=None):
-    if 'Cookie' in args:
-        headers['Cookie']=args['Cookie']
-
-    resp, content = httpHandler.request(url, method, headers=headers, body=body)
-    logger.debug("{} from cache: {}".format(url,resp.fromcache))
+    params = ""
+    for key, val in args.items():
+        params +="&{0}={1}".format(key,val)
+    print("params: {0}".format(params))
+    resp, content = httpHandler.request(url+'?'+params, method, headers=headers, body=body)
     return (resp,content)
