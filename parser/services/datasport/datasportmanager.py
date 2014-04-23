@@ -6,7 +6,7 @@ from parser.services.datasport import accountmanager
 import urllib
 import logging
 import json
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("default")
 
 
 def get_events(args=None):
@@ -26,16 +26,22 @@ def login(args=None):
     return (res['set-cookie'])
 
 def myaccount(args):
+    params = {}
+    logger.debug("My account request.")
     headers = authorization.checkCredentials(args)
+
+    params['id'] = '1413'
+    params['los'] = authorization.los()
+
     if headers['Cookie']=="":
+        logger.debug("Credential error.")
         return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)
     else:
-        params = {'id': '1413', 'los': '2015'}
+        logger.debug("Credential OK.")
+        res, cont = httpmanager.httprequest(COMMON_DATA['USER_DATA']['URL'], COMMON_DATA['USER_DATA']['LOGIN_NEEDED'],params , 'GET', headers)
+        print(cont)
         res, cont = httpmanager.httprequest(COMMON_DATA['CHANGE_USER_DATA']['URL'], COMMON_DATA['CHANGE_USER_DATA']['LOGIN_NEEDED'], params, 'GET', headers)
-        text = cont.decode('cp1250')
-        print(text)
-        if text.find('Wyloguj mnie') > -1:
-            results = accountmanager.get_user_data(text)
-            return json.dumps({'Status':res.reason, 'Cookie':"", 'Data':results }, indent = 4)
-        else:
-            return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)
+        user_data= accountmanager.get_user_data(cont)
+        return json.dumps({'Status':res.reason, 'Cookie': headers['Cookie'], 'Data': user_data }, indent = 4)
+#        else:
+#            return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)

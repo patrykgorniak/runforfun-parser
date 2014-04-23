@@ -5,9 +5,7 @@ import urllib.request
 from parser.common.utils import httpmanager
 from parser.services.datasport.urls import COMMON_DATA
 
-logger = logging.getLogger(__name__)
-
-
+logger = logging.getLogger("default")
 
 incorrect_login_body = """
 You must login to perform this operation
@@ -99,28 +97,34 @@ def change_password(session, args):
 
 
 def checkCredentials(args):
-    if 'cookie' not in args:
-        if 'login' not in args and 'haslo' not in args:
-            headers = { 'Cookie': "" }
-        else:
+    headers = {}
+    if 'cookie' in args:
+        headers = { 'Cookie': 'user={0}'.format(args['cookie']) }
+        logger.debug("Cookie exists {0}".format(headers))
+    else:
+        if 'login' in args and 'haslo' in args:
             login_resp = login(args)
             if login_resp != "":
                 headers = { 'Cookie': login_resp }
+                logger.debug("Cookie exists {0}".format(headers))
             else:
                 headers = { 'Cookie': "" }
-    else:
-        headers = { 'Cookie': 'user={0}'.format(args['cookie']) }
-
+                logger.debug("Could not login {0}".format(headers))
+        else:
+                headers = { 'Cookie': "" }
+                logger.debug("Could not login: {0}".format(headers))
     return headers
 
 def los():
-    nb = round(random(0,12)*100000)
+    nb = round(random.randint(1,11)*100000)
     return nb
 
 def login(args):
     result = None
     headers = {'Content-type': 'application/x-www-form-urlencoded'}
     res, cont = httpmanager.httprequest(COMMON_DATA['LOGIN']['URL'], COMMON_DATA['LOGIN']['LOGIN_NEEDED'], args, 'POST', headers, urllib.parse.urlencode(args))
+    print(cont)
+
     if 'set-cookie' not in res:
         result = ""
     else:
