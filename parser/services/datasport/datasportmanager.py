@@ -30,18 +30,25 @@ def myaccount(args):
     logger.debug("My account request.")
     headers = authorization.checkCredentials(args)
 
-    params['id'] = '1413'
-    params['los'] = authorization.los()
 
     if headers['Cookie']=="":
         logger.debug("Credential error.")
         return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)
     else:
         logger.debug("Credential OK.")
-        res, cont = httpmanager.httprequest(COMMON_DATA['USER_DATA']['URL'], COMMON_DATA['USER_DATA']['LOGIN_NEEDED'],params , 'GET', headers)
-        print(cont)
+        res, cont = httpmanager.httprequest(COMMON_DATA['USER_DATA']['URL'], COMMON_DATA['USER_DATA']['LOGIN_NEEDED'], params, 'GET', headers)
+
+        if not authorization.checkLogin(cont):
+            logger.debug("Credential error.")
+            return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)
+
+        params['id'] = accountmanager.get_id(cont)
+        params['los'] = authorization.los()
+
         res, cont = httpmanager.httprequest(COMMON_DATA['CHANGE_USER_DATA']['URL'], COMMON_DATA['CHANGE_USER_DATA']['LOGIN_NEEDED'], params, 'GET', headers)
         user_data= accountmanager.get_user_data(cont)
-        return json.dumps({'Status':res.reason, 'Cookie': headers['Cookie'], 'Data': user_data }, indent = 4)
-#        else:
+        user_data['id'] = params['id']
+        jsonf = json.dumps({'Status':res.reason, 'Cookie': headers['Cookie'], 'Data': user_data }, indent = 4)
+        return jsonf
+    #        else:
 #            return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)

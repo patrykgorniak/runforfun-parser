@@ -1,6 +1,7 @@
 import logging
 import random
 import urllib.request
+from pyquery import PyQuery
 
 from parser.common.utils import httpmanager
 from parser.services.datasport.urls import COMMON_DATA
@@ -123,7 +124,6 @@ def login(args):
     result = None
     headers = {'Content-type': 'application/x-www-form-urlencoded'}
     res, cont = httpmanager.httprequest(COMMON_DATA['LOGIN']['URL'], COMMON_DATA['LOGIN']['LOGIN_NEEDED'], args, 'POST', headers, urllib.parse.urlencode(args))
-    print(cont)
 
     if 'set-cookie' not in res:
         result = ""
@@ -131,3 +131,10 @@ def login(args):
         result = res['set-cookie']
 
     return (result)
+
+def checkLogin(html):
+    data = PyQuery(html)
+    if data('div#right')('p')('input').attr('value').find('Wyloguj') != -1:
+        return True
+    else:
+        return False

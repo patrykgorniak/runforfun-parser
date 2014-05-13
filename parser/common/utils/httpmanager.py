@@ -211,7 +211,6 @@ def call_api_func(function, args, login_needed):
 #                fp.write(json_dump)
 
 
-
 httpHandler = httplib2.Http('.cache', disable_ssl_certificate_validation=True)
 
 def httprequest(url, login_needed, args, method="GET", headers=None, body=None):
@@ -225,5 +224,5 @@ def httprequest(url, login_needed, args, method="GET", headers=None, body=None):
     logger.debug("Httprequest params: {0}".format(params))
     logger.debug("Httprequest headers: {0}".format(headers))
     logger.debug("Httprequest body: {0}".format(body))
-    resp, content = httpHandler.request(url+'?'+params, method, headers=headers, body=body)
-    return (resp,content)
+    resp, content = httpHandler.request(url + '?' + params, method, headers=headers, body=body)
+    return (resp, content.decode('cp1250'))
