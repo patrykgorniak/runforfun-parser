@@ -1,5 +1,4 @@
 from pyquery import PyQuery
-from parser.services.datasport.authorization import los
 import re
 
 def get_id(data):

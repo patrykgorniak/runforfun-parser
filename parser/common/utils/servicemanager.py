@@ -4,13 +4,12 @@ from parser.services.datasport import datasportmanager
 servicesMgr = {}
 servicesMgr['datasport'] = {
         'get_events': datasportmanager.get_events,
-        'login': datasportmanager.login,
         'myaccount': datasportmanager.myaccount
 }
 
 
 def __error__(reason):
-    return json.dumps({'Status': 'Error', 'Data': '{} does not exist.'.format(reason)},
+    return json.dumps({'Status': 'FAILED', 'Data': '{0} does not exist.'.format(reason)},
                       indent=4)
 
 

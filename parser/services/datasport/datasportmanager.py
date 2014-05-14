@@ -15,40 +15,19 @@ def get_events(args=None):
     results = eventlist.unpack_events(content, args)
     return json.dumps({'Status': res.reason, 'Data': results}, indent=4)
 
-
-def login(args=None):
-    args = {'login': 'Patryk.Gorniak', 'haslo': 'dupa1234'}
-    headers = {'Content-type': 'application/x-www-form-urlencoded'}
-    res, cont = httpmanager.httprequest(COMMON_DATA['LOGIN']['URL'], COMMON_DATA['LOGIN']['LOGIN_NEEDED'], args, 'POST', headers, urllib.parse.urlencode(args))
-#    headers = {}
-#    headers['Cookie'] = res['set-cookie']
-#    res, cont = httpmanager.httprequest(COMMON_DATA['USER_DATA']['URL'], COMMON_DATA['USER_DATA']['LOGIN_NEEDED'], args, 'GET', headers)
-    return (res['set-cookie'])
-
 def myaccount(args):
     params = {}
+    user_data = {}
     logger.debug("My account request.")
-    headers = authorization.checkCredentials(args)
-
-
-    if headers['Cookie']=="":
-        logger.debug("Credential error.")
-        return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)
+    ret, headers = authorization.login(args)
+    if ret==-1:
+        return json.dumps( {'Status': "FAILED"}, indent = 4)
     else:
-        logger.debug("Credential OK.")
-        res, cont = httpmanager.httprequest(COMMON_DATA['USER_DATA']['URL'], COMMON_DATA['USER_DATA']['LOGIN_NEEDED'], params, 'GET', headers)
-
-        if not authorization.checkLogin(cont):
-            logger.debug("Credential error.")
-            return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)
-
-        params['id'] = accountmanager.get_id(cont)
+        params['id'] = ret
         params['los'] = authorization.los()
+        user_data['id'] = params['id']
 
         res, cont = httpmanager.httprequest(COMMON_DATA['CHANGE_USER_DATA']['URL'], COMMON_DATA['CHANGE_USER_DATA']['LOGIN_NEEDED'], params, 'GET', headers)
-        user_data= accountmanager.get_user_data(cont)
-        user_data['id'] = params['id']
+        user_data.update(accountmanager.get_user_data(cont))
         jsonf = json.dumps({'Status':res.reason, 'Cookie': headers['Cookie'], 'Data': user_data }, indent = 4)
         return jsonf
-    #        else:
-#            return json.dumps( {'Status': "FAILED", 'Cookie':""}, indent = 4)

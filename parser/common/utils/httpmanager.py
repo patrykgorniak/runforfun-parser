@@ -215,10 +215,7 @@ httpHandler = httplib2.Http('.cache', disable_ssl_certificate_validation=True)
 
 def httprequest(url, login_needed, args, method="GET", headers=None, body=None):
     params = ""
-#    if login_needed:
-#        args['id'] = '1413'
-#        args['los'] = '2015'
-#
+
     for key, val in args.items():
         params +="&{0}={1}".format(key,val)
     logger.debug("Httprequest params: {0}".format(params))
