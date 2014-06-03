@@ -6,14 +6,18 @@ from parser.services.datasport import accountmanager
 import urllib
 import logging
 import json
+from parser.common.utils.httpresponse import HttpResponse
 logger = logging.getLogger("default")
 
 
 def get_events(args=None):
-    args = {}
     res, content = httpmanager.httprequest(COMMON_DATA['EVENT_LIST']['URL'], COMMON_DATA['LOGIN']['LOGIN_NEEDED'], args)
-    results = eventlist.unpack_events(content, args)
-    return json.dumps({'Status': res.reason, 'Data': results}, indent=4)
+    event_list = eventlist.unpack_events(content, args)
+
+    response = HttpResponse()
+    response.add_node('Status', res.reason)
+    response.add_node('Data', event_list)
+    return response
 
 
 def myaccount(args):
@@ -23,7 +27,7 @@ def myaccount(args):
     ret, headers = authorization.login(args)
 
     if ret == -1:
-        return json.dumps({'Status': "FAILED"}, indent=4)
+        return HttpResponse.error()
     else:
         params['id'] = ret
         params['los'] = authorization.los()
@@ -31,5 +35,9 @@ def myaccount(args):
 
         res, cont = httpmanager.httprequest(COMMON_DATA['CHANGE_USER_DATA']['URL'], COMMON_DATA['CHANGE_USER_DATA']['LOGIN_NEEDED'], params, 'GET', headers)
         user_data.update(accountmanager.get_user_data(cont))
-        jsonf = json.dumps({'Status': res.reason, 'Cookie': headers['Cookie'], 'Data': user_data}, indent=4)
-        return jsonf
+
+        response = HttpResponse()
+        response.add_node('Status', res.reason)
+        response.add_node('Cookie', headers['Cookie'])
+        response.add_node('Data', user_data)
+        return response

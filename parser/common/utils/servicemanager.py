@@ -1,5 +1,6 @@
 import json
 from parser.services.datasport import datasportmanager
+from parser.common.utils.httpresponse import HttpResponse
 
 servicesMgr = {}
 servicesMgr['datasport'] = {
@@ -8,16 +9,15 @@ servicesMgr['datasport'] = {
 }
 
 
-def __error__(reason):
-    return json.dumps({'Status': 'FAILED', 'Data': '{0} does not exist.'.format(reason)},
-                      indent=4)
-
-
 def run(service, action, args):
     if service in servicesMgr:
         if action in servicesMgr[service]:
-            return servicesMgr[service][action](args)
+            obj = servicesMgr[service][action](args)
+            if isinstance(obj, HttpResponse):
+                return obj
+            else:
+                return HttpResponse.error("dupa")
         else:
-            return __error__(action)
+            return HttpResponse.error(action)
     else:
-        return __error__(service)
+        return HttpResponse.error(service)
