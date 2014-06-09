@@ -26,3 +26,18 @@ def get_user_data(data):
     user_info['club'] = query("#klub").val()
     user_info['hide_results'] = query("#zastrzezone").val()
     return user_info
+
+def get_user_events(data):
+    user_events = {}
+    query = PyQuery(data)("#platnosci")("table")("tr")
+    print(query.eq(0))
+
+    for iter, row in enumerate(query):
+        row_data = {}
+        row_data["title"]  = str(query.eq(iter)("td").eq(0)("a").html()).replace(r"<br />", ";")
+        row_data["sign_in_url"] = query.eq(iter)("td").eq(0)("a").attr("href")
+        row_data["edit_url"] = query.eq(iter)("td").eq(2)("a").attr("href")
+        row_data["state"] = query.eq(iter)("td").eq(1).text()
+        user_events[iter] = row_data
+
+    return user_events

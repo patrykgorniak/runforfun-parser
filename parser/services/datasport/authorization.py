@@ -135,6 +135,7 @@ def __isLoggedIn__(html):
         return False
 
 def login(args):
+
     headers = __checkCredentials__(args)
 
     if headers['Cookie']=="":
@@ -148,9 +149,8 @@ def login(args):
             logger.debug("Credential error.")
             return -1, headers
 
-    return (accountmanager.get_id(cont), headers )
+    return (accountmanager.get_id(cont), headers, cont)
 
 def los():
     nb = round(random.randint(1,11)*100000)
     return nb
-
