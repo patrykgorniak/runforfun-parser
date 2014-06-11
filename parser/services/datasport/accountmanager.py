@@ -41,3 +41,25 @@ def get_user_events(data):
         user_events[iter] = row_data
 
     return user_events
+
+
+def get_user_history_results(data):
+    user_history = {}
+    nodes = PyQuery(data)('tr')
+
+    def parse_row(index, node):
+        data = {}
+        row = PyQuery(node)
+        if index!=0:
+            data = {'title':row('td').eq(0).text(),
+                    'city': row('td').eq(1).text(),
+                    'date': row('td').eq(2).text(),
+                    'place': row('td').eq(3).text(),
+                    'time': row('td').eq(4).text(),
+                    'results': row('td').eq(5)('a').attr("href")
+                    }
+            user_history[index] = data
+
+
+    nodes.each(parse_row)
+    return user_history

@@ -6,7 +6,8 @@ servicesMgr = {}
 servicesMgr['datasport'] = {
         'get_events': datasportmanager.get_events,
         'myaccount': datasportmanager.myaccount,
-        'get_user_events': datasportmanager.get_user_events
+        'get_user_events': datasportmanager.get_user_events,
+        'get_user_history_results': datasportmanager.get_user_history_results
 }
 
 

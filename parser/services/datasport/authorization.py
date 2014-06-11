@@ -140,14 +140,14 @@ def login(args):
 
     if headers['Cookie']=="":
         logger.debug("Credential error.")
-        return -1, headers
+        return -1, headers, None
     else:
         logger.debug("Credential OK.")
         res, cont = httpmanager.httprequest(COMMON_DATA['USER_DATA']['URL'], COMMON_DATA['USER_DATA']['LOGIN_NEEDED'], {}, 'GET', headers)
 
         if not __isLoggedIn__(cont):
             logger.debug("Credential error.")
-            return -1, headers
+            return -1, headers, None
 
     return (accountmanager.get_id(cont), headers, cont)
 

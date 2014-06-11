@@ -22,7 +22,7 @@ def myaccount(args):
     params = {}
     user_data = {}
     logger.debug("My account request.")
-    ret, headers = authorization.login(args)
+    ret, headers, content = authorization.login(args)
 
     if ret == -1:
         return HttpResponse()
@@ -52,6 +52,22 @@ def get_user_events(args):
 #        res, cont = httpmanager.httprequest(COMMON_DATA['USER_DATA']['URL'], COMMON_DATA['USER_DATA']['LOGIN_NEEDED'],{} , 'GET', headers)
 
     user_events.update(accountmanager.get_user_events(cont))
+
+    response = HttpResponse()
+    response.set_status(HttpResponseStatus.OK)
+    response.add_node("Data:", user_events)
+    return response
+
+def get_user_history_results(args):
+    if not 'id' in args:
+        return HttpResponse();
+
+    params = {'id': args['id']}
+    user_events = {}
+    logger.debug("Get user events history request.")
+
+    res, cont = httpmanager.httprequest(COMMON_DATA['USER_HISTORY_RESULTS']['URL'], COMMON_DATA['USER_HISTORY_RESULTS']['LOGIN_NEEDED'],params , 'GET',  {})
+    user_events.update(accountmanager.get_user_history_results(cont))
 
     response = HttpResponse()
     response.set_status(HttpResponseStatus.OK)
