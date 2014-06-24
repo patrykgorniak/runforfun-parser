@@ -63,3 +63,11 @@ def get_user_history_results(data):
 
     nodes.each(parse_row)
     return user_history
+
+
+def check_change_pass_result(data):
+    res = PyQuery(data).text()
+    if res == "ZAPISANO!":
+        return True
+    else:
+        return False

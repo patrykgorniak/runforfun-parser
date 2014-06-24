@@ -3,12 +3,7 @@ from parser.services.datasport import datasportmanager
 from parser.common.utils.httpresponse import *
 
 servicesMgr = {}
-servicesMgr['datasport'] = {
-        'get_events': datasportmanager.get_events,
-        'myaccount': datasportmanager.myaccount,
-        'get_user_events': datasportmanager.get_user_events,
-        'get_user_history_results': datasportmanager.get_user_history_results
-}
+servicesMgr['datasport'] = datasportmanager.get_interface()
 
 
 def run(service, action, args):
