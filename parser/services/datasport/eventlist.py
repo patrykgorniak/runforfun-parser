@@ -60,11 +60,11 @@ def unpack_events(html, args):
     logger.debug("Source encoding: {} ".format(query.encoding))
     rows = query.items('tr')
     offset = 0
-    events = {}
+    events = []
     for row in rows:
         parsed_row = __parse_row(row)
         event_id = offset
-        events.update({event_id: parsed_row})
+        events.append(parsed_row)
         offset += 1
 
     logger.debug("Parsed {} entries".format(offset))
