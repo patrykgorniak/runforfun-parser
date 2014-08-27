@@ -1,2 +1,4 @@
 Parser:: Datasport:
-- add date filtering for event list
+- add date filtering for event list: optimalization. Events are sorted by date. We do not have to check all in some
+  cases.
+
