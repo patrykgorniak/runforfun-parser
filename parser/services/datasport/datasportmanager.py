@@ -21,7 +21,8 @@ def get_interface(args=None):
 
 def get_events(args=None):
     res, content = httpmanager.httprequest(COMMON_DATA['EVENT_LIST']['URL'], COMMON_DATA['LOGIN']['LOGIN_NEEDED'], args)
-    event_list = eventlist.unpack_events(content, args)
+    event_list_tmp = eventlist.unpack_events(content, args)
+    event_list = eventlist.filter_events(event_list_tmp, args)
 
     response = HttpResponse()
     response.set_status(res.reason)

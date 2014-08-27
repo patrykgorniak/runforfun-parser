@@ -1,5 +1,6 @@
 from pyquery import PyQuery
 import logging
+from datetime import datetime
 logger = logging.getLogger("EventList")
 
 
@@ -42,7 +43,7 @@ class EventInfo(object):
 
 
 def __parse_row(entry_row):
-    # Get event type. For now it is image name f.g narty.gif, bieg.gif et
+    # Get event type. For now it is image name f.g narty.gif, bieg.gif etc
     row = entry_row('td')
     event_type = get_event_type_from_string(row.find("img").attr("src"))
     event_date = row.find("font").eq(0).text()
@@ -69,3 +70,27 @@ def unpack_events(html, args):
 
     logger.debug("Parsed {} entries".format(offset))
     return events
+
+def filter_events(events, args):
+    new_events = []
+    date_to = datetime.strptime("9999-01-01", "%Y-%m-%d")
+    date_from = datetime.strptime("0001-01-01", "%Y-%m-%d")
+
+    try:
+        if 'date_to' in args:
+            date_to = datetime.strptime(args['date_to'],"%Y-%m-%d")
+    except ValueError:
+        pass
+    try:
+        if 'date_from' in args:
+            date_from = datetime.strptime(args['date_from'],"%Y-%m-%d")
+    except ValueError:
+        pass
+
+    for event in events:
+        event_date = datetime.strptime("0001-01-01","%Y-%m-%d") if event['date']=="0000-00-00" else datetime.strptime(event['date'],"%Y-%m-%d")
+        if event_date >= date_from and event_date<=date_to:
+            new_events.append(event)
+
+
+    return new_events
