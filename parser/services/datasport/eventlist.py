@@ -75,22 +75,26 @@ def filter_events(events, args):
     new_events = []
     date_to = datetime.strptime("9999-01-01", "%Y-%m-%d")
     date_from = datetime.strptime("0001-01-01", "%Y-%m-%d")
+    do_filter = False
 
     try:
         if 'date_to' in args:
             date_to = datetime.strptime(args['date_to'],"%Y-%m-%d")
+            do_filter = True
     except ValueError:
         pass
     try:
         if 'date_from' in args:
             date_from = datetime.strptime(args['date_from'],"%Y-%m-%d")
+            do_filter = True
     except ValueError:
         pass
+
+    if not do_filter:
+        return events
 
     for event in events:
         event_date = datetime.strptime("0001-01-01","%Y-%m-%d") if event['date']=="0000-00-00" else datetime.strptime(event['date'],"%Y-%m-%d")
         if event_date >= date_from and event_date<=date_to:
             new_events.append(event)
-
-
     return new_events
